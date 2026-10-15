@@ -320,12 +320,7 @@ function closeAuthModal() {
   if (modal) modal.style.display = 'none';
 }
 
-function handleAuth(e) {
-  e.preventDefault();
-  const email = document.getElementById('authEmail').value;
-  alert('Welcome to OmniFlow AI: ' + email);
-  closeAuthModal();
-}
+
 // --- DIRECT EMAIL LOGIN SYSTEM ---
 function handleAuth(e) {
   if (e) e.preventDefault();
