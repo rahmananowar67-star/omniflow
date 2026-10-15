@@ -199,6 +199,29 @@
   
 
   <script src="script.js"></script>
+
+  <!-- FOOTER & LEGAL LINKS -->
+  <footer style="text-align: center; padding: 2.5rem 1rem 3rem; color: #64748b; font-size: 0.85rem; border-top: 1px solid rgba(255,255,255,0.08); margin-top: 3.5rem;">
+    <p style="margin-bottom: 0.8rem;">© 2026 OmniFlow Studio. All rights reserved.</p>
+    <div style="display: flex; justify-content: center; gap: 1.2rem; flex-wrap: wrap;">
+      <a href="javascript:void(0)" onclick="openPolicyModal('privacy')" style="color: #94a3b8; text-decoration: none;">Privacy Policy</a>
+      <span>•</span>
+      <a href="javascript:void(0)" onclick="openPolicyModal('terms')" style="color: #94a3b8; text-decoration: none;">Terms of Service</a>
+      <span>•</span>
+      <a href="javascript:void(0)" onclick="openPolicyModal('security')" style="color: #94a3b8; text-decoration: none;">Security & Data</a>
+    </div>
+  </footer>
+
+  <!-- POLICY POPUP MODAL -->
+  <div id="policyModal" class="policy-modal-overlay" style="display: none;">
+    <div class="policy-modal-card">
+      <button class="policy-close-btn" onclick="closePolicyModal()">×</button>
+      <h3 id="policyModalTitle" style="color: #38bdf8; margin-top: 0;">Policy Details</h3>
+      <div id="policyModalBody" style="max-height: 60vh; overflow-y: auto; text-align: left; font-size: 0.85rem; color: #cbd5e1; line-height: 1.6; margin-top: 1rem; padding-right: 6px;">
+        <!-- Dynamic content will load here -->
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>
-
