@@ -326,76 +326,45 @@ function handleAuth(e) {
   alert('Welcome to OmniFlow AI: ' + email);
   closeAuthModal();
 }
-// --- FIREBASE AUTO-LOAD & GOOGLE SIGN-IN ---
-(function() {
-  function loadScript(src) {
-    return new Promise((resolve, reject) => {
-      const s = document.createElement('script');
-      s.src = src;
-      s.onload = resolve;
-      s.onerror = reject;
-      document.head.appendChild(s);
-    });
+// --- DIRECT EMAIL LOGIN SYSTEM ---
+function handleAuth(e) {
+  if (e) e.preventDefault();
+  const emailInput = document.getElementById('authEmail');
+  const email = emailInput ? emailInput.value.trim() : '';
+
+  if (!email) return;
+
+  // Local storage me user save karein
+  localStorage.setItem('omniflow_user_email', email);
+
+  // Modal band karein
+  closeAuthModal();
+
+  // Screen par login show karein
+  updateUserDisplay(email);
+  alert('Welcome to OmniFlow AI: ' + email);
+}
+
+function updateUserDisplay(email) {
+  const actions = document.querySelector('.header-actions');
+  if (!actions) return;
+  const username = email.split('@')[0];
+  actions.innerHTML = `
+    <span style="color:#38bdf8; font-weight:600; font-size:13px;">👋 ${username}</span>
+    <button class="btn-clean" onclick="logoutUser()" style="color:#ef4444; font-size:12px; margin-left:8px; cursor:pointer;">Log Out</button>
+  `;
+}
+
+function logoutUser() {
+  if (confirm('Log out hona chahte hain?')) {
+    localStorage.removeItem('omniflow_user_email');
+    location.reload();
   }
+}
 
-  loadScript("https://www.gstatic.com/firebasejs/10.9.0/firebase-app-compat.js")
-    .then(() => loadScript("https://www.gstatic.com/firebasejs/10.9.0/firebase-auth-compat.js"))
-    .then(() => {
-      const firebaseConfig = {
-        apiKey: "AIzaSyBEkvQlivgKTWCUmkCLZrwF0N0Lnn3iGk4",
-        authDomain: "yteter.firebaseapp.com",
-        projectId: "yteter",
-        storageBucket: "yteter.firebasestorage.app",
-        messagingSenderId: "690832681779",
-        appId: "1:690832681779:web:02fec3eb06f26d9e3c2c46"
-      };
-
-      if (!firebase.apps.length) {
-        firebase.initializeApp(firebaseConfig);
-      }
-
-      window.auth = firebase.auth();
-      window.googleProvider = new firebase.auth.GoogleAuthProvider();
-
-      // Real Google Login Trigger
-      window.loginWithGoogle = function() {
-        window.auth.signInWithPopup(window.googleProvider)
-          .then((result) => {
-            alert("Login Successful! Welcome, " + result.user.displayName);
-            if (typeof closeAuthModal === 'function') closeAuthModal();
-            updateAuthHeader(result.user);
-          })
-          .catch((error) => {
-            alert("Login Failed: " + error.message);
-          });
-      };
-
-      // Header Button Update on Auth State
-      window.auth.onAuthStateChanged((user) => {
-        updateAuthHeader(user);
-      });
-
-      function updateAuthHeader(user) {
-        const headerActions = document.querySelector('.header-actions');
-        if (!headerActions) return;
-
-        if (user) {
-          headerActions.innerHTML = `
-            <div style="display:flex; align-items:center; gap:8px;">
-              <img src="${user.photoURL || 'https://via.placeholder.com/30'}" style="width:28px; height:28px; border-radius:50%; border:1px solid #444;">
-              <span style="color:#fff; font-size:13px; font-weight:600;">${user.displayName || 'User'}</span>
-              <button onclick="window.auth.signOut()" class="btn-clean" style="padding:4px 8px; font-size:11px; color:#ff5555;">Logout</button>
-            </div>
-          `;
-        }
-      }
-
-      // Existing modal buttons override
-      window.openAuthModal = function() {
-        window.loginWithGoogle();
-      };
-    })
-    .catch((err) => console.error("Firebase SDK Load Error:", err));
-})();
-  
+// Page refresh par login check karein
+document.addEventListener('DOMContentLoaded', () => {
+  const saved = localStorage.getItem('omniflow_user_email');
+  if (saved) updateUserDisplay(saved);
+});
 
