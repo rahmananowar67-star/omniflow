@@ -177,21 +177,28 @@
 
   </main>
 
-  <!-- Simple Auth/Pro Modal -->
-  <div id="authModal" class="modal-overlay" style="display: none;">
-    <div class="modal-card">
-      <div class="modal-header">
-        <h3>OmniFlow Pro Access</h3>
-        <button class="btn-close" onclick="closeAuthModal()">✕</button>
+  <!-- Email Only Login Modal -->
+<div id="authModal" class="auth-modal-overlay" style="display: none;">
+  <div class="auth-modal-card">
+    <button class="auth-close-btn" onclick="closeAuthModal()">&times;</button>
+    <div class="auth-badge">OmniFlow AI Access</div>
+    <h3>Log In to OmniFlow</h3>
+    <p>Apna email darj karein aur instant access paayein.</p>
+    
+    <form id="emailLoginForm" onsubmit="handleAuth(event)">
+      <div class="auth-input-group">
+        <label>Email Address</label>
+        <input type="email" id="authEmail" placeholder="name@example.com" required autocomplete="email">
       </div>
-      <p>Supercharge your e-commerce and creator workflow with unlimited AI generations, direct CSV exports, and priority models.</p>
-      <form onsubmit="handleAuth(event)">
-        <input type="email" id="authEmail" placeholder="Enter your business email" required>
-        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 12px; justify-content: center;">Continue to OmniFlow</button>
-      </form>
-    </div>
+      <button type="submit" class="auth-submit-btn">
+        Continue with Email 🚀
+      </button>
+    </form>
   </div>
+</div>
+  
 
   <script src="script.js"></script>
 </body>
 </html>
+
