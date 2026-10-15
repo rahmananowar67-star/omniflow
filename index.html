@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OmniFlow AI - All-in-One Global Creator Suite</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  
+  
+  <header class="app-header">
+    <div class="brand">
+      <div class="logo-icon">⚡</div>
+      <div class="brand-text">
+        <span class="logo-title">OmniFlow <span class="badge-ai">AI</span></span>
+        <span class="logo-subtitle">All-in-One Global Creator Hub</span>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn-clean" onclick="openAuthModal('login')">Log In</button>
+      <button class="btn-primary" onclick="openAuthModal('signup')">Free Access</button>
+    </div>
+  </header>
+
+  <!-- Main Workspace -->
+  <main class="main-container">
+
+    <div class="hero-section">
+      <div class="status-pill">🔥 80–90% Daily Creative Tasks Automated</div>
+      <h1>Every Creator & Growth Tool in One Hub</h1>
+      <p>Choose a tool, enter your product or concept, and generate studio-grade output instantly.</p>
+    </div>
+
+    <!-- Category Filters -->
+    <div class="category-bar">
+      <button class="cat-pill active" onclick="filterCategory('all', event)">✨ All Tools</button>
+      <button class="cat-pill" onclick="filterCategory('video', event)">🎬 Video & Reels</button>
+      <button class="cat-pill" onclick="filterCategory('merch', event)">👕 Merch & POD</button>
+      <button class="cat-pill" onclick="filterCategory('ecom', event)">🛒 E-Com & Sales</button>
+      <button class="cat-pill" onclick="filterCategory('social', event)">📈 Social Growth</button>
+      <button class="cat-pill" onclick="filterCategory('utility', event)">⚡ Smart Utilities</button>
+    </div>
+
+    <!-- Active Tool Status Banner -->
+    <div class="active-tool-banner">
+      <div class="active-tool-badge" id="currentToolBadge">Selected: 👕 T-Shirt / Merch Video Ad Studio</div>
+      <p class="active-tool-hint" id="currentToolHint">Creates complete video ad script, AI visual prompt, music idea, and viral tags for your apparel design.</p>
+    </div>
+
+    <!-- Multi-Tool Selector Cards Grid -->
+    <div class="tools-grid">
+
+      <!-- Merch Video Tool -->
+      <div class="tool-card active" data-category="merch" onclick="selectTool('merch-video', this)">
+        <div class="tool-icon">👕</div>
+        <div class="tool-info">
+          <h3>Merch Video Ad Studio</h3>
+          <p>T-shirt promo scenes, video prompt & audio</p>
+        </div>
+      </div>
+
+      <!-- Video & Reels Tools -->
+      <div class="tool-card" data-category="video" onclick="selectTool('reel-script', this)">
+        <div class="tool-icon">🎬</div>
+        <div class="tool-info">
+          <h3>Viral Reel Script</h3>
+          <p>Hook, visual storyboard & scene cues</p>
+        </div>
+      </div>
+
+      <div class="tool-card" data-category="video" onclick="selectTool('video-prompt', this)">
+        <div class="tool-icon">🎥</div>
+        <div class="tool-info">
+          <h3>AI Video Prompts</h3>
+          <p>Kling, Luma & Runway cinematic prompts</p>
+        </div>
+      </div>
+
+      <!-- Merch & POD Tools -->
+      <div class="tool-card" data-category="merch" onclick="selectTool('pod-seo', this)">
+        <div class="tool-icon">🏷️</div>
+        <div class="tool-info">
+          <h3>POD Listing & SEO</h3>
+          <p>Title, description & 13 Zazzle/Redbubble tags</p>
+        </div>
+      </div>
+
+      <div class="tool-card" data-category="merch" onclick="selectTool('slogan-ideas', this)">
+        <div class="tool-icon">💡</div>
+        <div class="tool-info">
+          <h3>Merch Slogans & Quotes</h3>
+          <p>Viral punchlines for streetwear & graphic tees</p>
+        </div>
+      </div>
+
+      <!-- E-Commerce Tools (New Feature Additions) -->
+      <div class="tool-card" data-category="ecom" onclick="selectTool('shopify-page', this)">
+        <div class="tool-icon">🛍️</div>
+        <div class="tool-info">
+          <h3>Shopify & Etsy Page Studio</h3>
+          <p>Description, benefit bullets, sizing & FAQs</p>
+        </div>
+      </div>
+
+      <div class="tool-card" data-category="ecom" onclick="selectTool('cart-recovery', this)">
+        <div class="tool-icon">📧</div>
+        <div class="tool-info">
+          <h3>Cart Recovery Email Flow</h3>
+          <p>3-Stage high-converting lost sale emails</p>
+        </div>
+      </div>
+
+      <div class="tool-card" data-category="ecom" onclick="selectTool('master-launch', this)">
+        <div class="tool-icon">🚀</div>
+        <div class="tool-info">
+          <h3>1-Click Master Launch</h3>
+          <p>All-in-one: SEO Listing + Video Ad + Ad Copy</p>
+        </div>
+      </div>
+
+      <!-- Social Growth Tools -->
+      <div class="tool-card" data-category="social" onclick="selectTool('viral-tags', this)">
+        <div class="tool-icon">#️⃣</div>
+        <div class="tool-info">
+          <h3>Viral Hashtag Engine</h3>
+          <p>Top niche + high-reach tag batches</p>
+        </div>
+      </div>
+
+      <div class="tool-card" data-category="social" onclick="selectTool('caption', this)">
+        <div class="tool-icon">📝</div>
+        <div class="tool-info">
+          <h3>High-CTR Captions</h3>
+          <p>Engaging storytelling & call-to-actions</p>
+        </div>
+      </div>
+
+      <!-- Utility Tools -->
+      <div class="tool-card" data-category="utility" onclick="selectTool('ad-copy', this)">
+        <div class="tool-icon">🎯</div>
+        <div class="tool-info">
+          <h3>High-ROAS Ad Studio</h3>
+          <p>Meta/TikTok targeting, viral hooks & ad copy</p>
+        </div>
+      </div>
+
+      <div class="tool-card" data-category="utility" onclick="selectTool('english-polish', this)">
+        <div class="tool-icon">💎</div>
+        <div class="tool-info">
+          <h3>US/UK English Polisher</h3>
+          <p>Turn rough sentences into fluent native English</p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Input Generator Card -->
+    <div class="generator-box">
+      <label id="inputBoxLabel" for="topicInput">ENTER YOUR T-SHIRT DESIGN THEME OR TITLE</label>
+      <textarea id="topicInput" rows="3" placeholder="e.g., Japanese Cyberpunk Samurai T-Shirt, Gym Motivation Drop, Vintage Wolf Graphic..."></textarea>
+      
+      <button class="btn-generate-main" onclick="generateMarketing()">
+        Generate With AI ⚡
+      </button>
+    </div>
+
+    <!-- Output Display Card -->
+    <div id="outputBox" class="output-box" style="display: none;">
+      <div class="output-header">
+        <span class="badge-ready">READY</span>
+        <button class="btn-copy" onclick="copyOutput()">Copy All 📋</button>
+      </div>
+      <div id="outputContent" class="output-content"></div>
+    </div>
+
+  </main>
+
+  <!-- Simple Auth/Pro Modal -->
+  <div id="authModal" class="modal-overlay" style="display: none;">
+    <div class="modal-card">
+      <div class="modal-header">
+        <h3>OmniFlow Pro Access</h3>
+        <button class="btn-close" onclick="closeAuthModal()">✕</button>
+      </div>
+      <p>Supercharge your e-commerce and creator workflow with unlimited AI generations, direct CSV exports, and priority models.</p>
+      <form onsubmit="handleAuth(event)">
+        <input type="email" id="authEmail" placeholder="Enter your business email" required>
+        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 12px; justify-content: center;">Continue to OmniFlow</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
