@@ -138,6 +138,10 @@ function selectTool(toolKey, element) {
   activeTool = toolKey;
   document.querySelectorAll('.tool-card').forEach(c => c.classList.remove('active'));
   element.classList.add('active');
+const inputEl = document.getElementById('topicInput');
+const outputBoxEl = document.getElementById('outputBox');
+if (inputEl) inputEl.value = '';
+if (outputBoxEl) outputBoxEl.style.display = 'none';  
 
   const conf = toolConfig[toolKey];
   document.getElementById('currentToolBadge').innerText = 'Selected: ' + conf.title;
