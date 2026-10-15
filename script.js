@@ -367,3 +367,47 @@ document.addEventListener('DOMContentLoaded', () => {
   if (saved) updateUserDisplay(saved);
 });
 
+// --- POLICY MODAL HANDLER ---
+const policyData = {
+  privacy: {
+    title: 'Privacy Policy',
+    content: `
+      <p><strong>1. Data Collection:</strong> We only store your email address locally in your browser to maintain your session and count your daily tool credits.</p>
+      <p><strong>2. Third-Party Sharing:</strong> We do NOT sell, rent, or trade your personal information with any third-party advertisers.</p>
+      <p><strong>3. AI Processing:</strong> Text inputs provided to generate e-commerce content are securely processed via Google Gemini API to return your results.</p>
+    `
+  },
+  terms: {
+    title: 'Terms of Service',
+    content: `
+      <p><strong>1. Service Usage:</strong> OmniFlow provides AI-generated marketing copy, SEO listings, and tags. You retain full ownership to use generated outputs for your stores.</p>
+      <p><strong>2. Free Quota:</strong> Free accounts receive up to 5 generations per day. Fair usage limits apply.</p>
+      <p><strong>3. Pro Upgrades:</strong> Future Pro subscriptions will unlock unlimited access under standard monthly billing rules.</p>
+    `
+  },
+  security: {
+    title: 'Security & Data Protection',
+    content: `
+      <p><strong>1. Encryption:</strong> All requests to OmniFlow Studio are transmitted via HTTPS SSL encryption.</p>
+      <p><strong>2. Local Storage Safety:</strong> Your credentials are kept inside your own device browser cache and can be cleared anytime by logging out.</p>
+    `
+  }
+};
+
+function openPolicyModal(type) {
+  const modal = document.getElementById('policyModal');
+  const title = document.getElementById('policyModalTitle');
+  const body = document.getElementById('policyModalBody');
+  const data = policyData[type];
+
+  if (modal && data) {
+    title.innerText = data.title;
+    body.innerHTML = data.content;
+    modal.style.display = 'flex';
+  }
+}
+
+function closePolicyModal() {
+  const modal = document.getElementById('policyModal');
+  if (modal) modal.style.display = 'none';
+}
