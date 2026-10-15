@@ -313,12 +313,26 @@ async function generateMarketing() {
     generateBtn.disabled = false;
   }
 }
-
 function copyOutput() {
   const text = document.getElementById('outputContent').innerText;
-  navigator.clipboard.writeText(text);
-  alert('Copied to clipboard! 📋');
+  const btn = document.querySelector('.btn-copy');
+  
+  navigator.clipboard.writeText(text).then(() => {
+    if (btn) {
+      const originalText = btn.innerHTML;
+      btn.innerHTML = '✓ Copied!';
+      btn.style.background = '#10b981';
+      btn.style.color = '#fff';
+      
+      setTimeout(() => {
+        btn.innerHTML = originalText;
+        btn.style.background = '';
+        btn.style.color = '';
+      }, 2000);
+    }
+  });
 }
+
 
 function openAuthModal(mode) {
   const modal = document.getElementById('authModal');
