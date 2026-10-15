@@ -399,23 +399,3 @@ function handleAuth(e) {
 })();
   
 
-<!-- Email Only Login Modal -->
-<div id="authModal" class="auth-modal-overlay" style="display: none;">
-  <div class="auth-modal-card">
-    <button class="auth-close-btn" onclick="closeAuthModal()">&times;</button>
-    <div class="auth-badge">OmniFlow AI Access</div>
-    <h3>Log In to OmniFlow</h3>
-    <p>Apna email darj karein aur instant access paayein.</p>
-    
-    <form id="emailLoginForm" onsubmit="handleAuth(event)">
-      <div class="auth-input-group">
-        <label>Email Address</label>
-        <input type="email" id="authEmail" placeholder="name@example.com" required autocomplete="email">
-      </div>
-      <button type="submit" class="auth-submit-btn">
-        Continue with Email 🚀
-      </button>
-    </form>
-  </div>
-</div>
-  
