@@ -265,7 +265,7 @@ async function generateMarketing() {
 
   const credits = getCreditsRemaining();
   if (credits <= 0) {
-    alert('⚡ Free daily limit reached (5/5 used)! Upgrade to OmniFlow Pro for unlimited generations & studio tools.');
+    alert('⚡ Free daily limit reached (3/3) used)! Upgrade to OmniFlow Pro for unlimited generations & studio tools.');
     openAuthModal('pro');
     return;
   }
@@ -296,9 +296,15 @@ async function generateMarketing() {
     if (data.candidates && data.candidates[0].content && data.candidates[0].content.parts[0].text) {
       outputContent.innerText = data.candidates[0].content.parts[0].text;
       consumeCredit();
+      updateCreditDisplay();
+      
     } else {
+      updateCreditDisplay();
+      
       outputContent.innerText = getSmartFallback(topic, activeTool);
       consumeCredit();
+      updateCreditDisplay();
+      
     }
   } catch (err) {
     outputContent.innerText = getSmartFallback(topic, activeTool);
@@ -411,3 +417,23 @@ function closePolicyModal() {
   const modal = document.getElementById('policyModal');
   if (modal) modal.style.display = 'none';
 }
+// --- LIVE CREDIT BADGE UPDATE ---
+function updateCreditDisplay() {
+  const credits = typeof getCreditsRemaining === 'function' ? getCreditsRemaining() : 3;
+  const badge = document.getElementById('creditBadge');
+  if (badge) {
+    badge.innerText = `⚡ Credits: ${credits}/3 left today`;
+    if (credits <= 0) {
+      badge.style.color = '#ef4444';
+      badge.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+      badge.style.background = 'rgba(239, 68, 68, 0.15)';
+    } else {
+      badge.style.color = '#38bdf8';
+      badge.style.borderColor = 'rgba(56, 189, 248, 0.3)';
+      badge.style.background = 'rgba(56, 189, 248, 0.12)';
+    }
+  }
+}
+
+// Page load hote hi live count show karein
+document.addEventListener('DOMContentLoaded', updateCreditDisplay);
