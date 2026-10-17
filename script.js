@@ -349,7 +349,8 @@ function closeAuthModal() {
 // --- DIRECT EMAIL LOGIN SYSTEM ---
 function handleAuth(e) {
     if (e) e.preventDefault();
-    const emailInput = document.getElementById('authEmail');
+const emailInput = document.getElementById('authEmail');
+  
     const email = emailInput ? emailInput.value.trim() : '';
 
     if (!email) return;
