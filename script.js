@@ -317,13 +317,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (saved) {
         updateUserDisplay(saved);
         if (mainContainer) mainContainer.style.display = 'block';
-        if (authModal) authModal.style.setProperty('display', 'none', 'important');
+        if (authModal) authModal.style.display = 'none';
     } else {
-        if (authModal) {
-            authModal.style.setProperty('display', 'flex', 'important');
-        }
-        if (mainContainer) {
-            mainContainer.style.display = 'none';
-        }
+        if (mainContainer) mainContainer.style.display = 'block';
+        if (authModal) authModal.style.display = 'none';
     }
 });
+
