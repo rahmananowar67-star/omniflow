@@ -331,19 +331,20 @@ function copyOutput() {
       }, 2000);
     }
   }
-                                           function openAuthModal(mode) {
+   function openAuthModal(mode) {
     const modal = document.getElementById('authModal');
     if (modal) {
-        modal.style.display = 'flex';
+        modal.style.setProperty('display', 'flex', 'important');
     }
 }
 
 function closeAuthModal() {
     const modal = document.getElementById('authModal');
     if (modal) {
-        modal.style.display = 'none';
+        modal.style.setProperty('display', 'none', 'important');
     }
 }
+  
 
 // --- DIRECT EMAIL LOGIN SYSTEM ---
 function handleAuth(e) {
@@ -388,7 +389,6 @@ function logoutUser() {
     location.reload();
   }
 }
-
 document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('omniflow_user_email');
     const mainContainer = document.getElementById('mainDashboard') || document.querySelector('.main-container');
@@ -396,20 +396,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (saved) {
         updateUserDisplay(saved);
-        if (mainContainer) {
-            mainContainer.style.display = 'block';
-        }
-        if (authModal) {
-            authModal.style.display = 'none';
-        }
+        if (mainContainer) mainContainer.style.display = 'block';
+        if (authModal) authModal.style.setProperty('display', 'none', 'important');
     } else {
         if (authModal) {
-            authModal.style.display = 'flex';
+            authModal.style.setProperty('display', 'flex', 'important');
         }
         if (mainContainer) {
             mainContainer.style.display = 'none';
         }
     }
+});
+  
 });
 
 });
