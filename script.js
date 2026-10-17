@@ -381,10 +381,20 @@ function logoutUser() {
   }
 }
 
-// Page refresh par login check karein
 document.addEventListener('DOMContentLoaded', () => {
-  const saved = localStorage.getItem('omniflow_user_email');
-  if (saved) updateUserDisplay(saved);
+    const saved = localStorage.getItem('omniflow_user_email');
+    if (saved) {
+        updateUserDisplay(saved);
+    } else {
+        const authModal = document.getElementById('authModal');
+        if (authModal) {
+            authModal.style.display = 'flex';
+        }
+        const mainContainer = document.querySelector('.main-container');
+        if (mainContainer) {
+            mainContainer.style.display = 'none';
+        }
+    }
 });
 
 // --- POLICY MODAL HANDLER ---
