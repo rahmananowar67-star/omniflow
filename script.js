@@ -330,39 +330,47 @@ function copyOutput() {
         btn.style.color = '';
       }, 2000);
     }
-  });
-}
-
-
-function openAuthModal(mode) {
-  const modal = document.getElementById('authModal');
-  if (modal) modal.style.display = 'flex';
+  }
+                                           function openAuthModal(mode) {
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.style.display = 'flex';
+    }
 }
 
 function closeAuthModal() {
-  const modal = document.getElementById('authModal');
-  if (modal) modal.style.display = 'none';
+    const modal = document.getElementById('authModal');
+    if (modal) {
+        modal.style.display = 'none';
+    }
 }
-
 
 // --- DIRECT EMAIL LOGIN SYSTEM ---
 function handleAuth(e) {
-  if (e) e.preventDefault();
-  const emailInput = document.getElementById('authEmail');
-  const email = emailInput ? emailInput.value.trim() : '';
+    if (e) e.preventDefault();
+    const emailInput = document.getElementById('authEmail');
+    const email = emailInput ? emailInput.value.trim() : '';
 
-  if (!email) return;
+    if (!email) return;
 
-  // Local storage me user save karein
-  localStorage.setItem('omniflow_user_email', email);
+    // Local storage me user save karein
+    localStorage.setItem('omniflow_user_email', email);
 
-  // Modal band karein
-  closeAuthModal();
+    // Modal band karein
+    closeAuthModal();
 
-  // Screen par login show karein
-  updateUserDisplay(email);
-  alert('Welcome to OmniFlow AI: ' + email);
+    // Screen par login show karein
+    updateUserDisplay(email);
+    
+    // Dashboard show karein aur main container dikhayein
+    const mainContainer = document.getElementById('mainDashboard') || document.querySelector('.main-container');
+    if (mainContainer) {
+        mainContainer.style.display = 'block';
+    }
+
+    alert('Welcome to OmniFlow AI: ' + email);
 }
+  
 
 function updateUserDisplay(email) {
   const actions = document.querySelector('.header-actions');
