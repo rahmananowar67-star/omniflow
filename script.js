@@ -383,18 +383,27 @@ function logoutUser() {
 
 document.addEventListener('DOMContentLoaded', () => {
     const saved = localStorage.getItem('omniflow_user_email');
+    const mainContainer = document.getElementById('mainDashboard') || document.querySelector('.main-container');
+    const authModal = document.getElementById('authModal');
+
     if (saved) {
         updateUserDisplay(saved);
+        if (mainContainer) {
+            mainContainer.style.display = 'block';
+        }
+        if (authModal) {
+            authModal.style.display = 'none';
+        }
     } else {
-        const authModal = document.getElementById('authModal');
         if (authModal) {
             authModal.style.display = 'flex';
         }
-        const mainContainer = document.querySelector('.main-container');
         if (mainContainer) {
             mainContainer.style.display = 'none';
         }
     }
+});
+
 });
 
 // --- POLICY MODAL HANDLER ---
