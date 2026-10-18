@@ -225,7 +225,6 @@ function closeAuthModal() {
     }
 }
 
-
 function handleAuth(e) {
     if (e) e.preventDefault();
     const emailInput = document.getElementById('authEmail');
@@ -238,6 +237,9 @@ function handleAuth(e) {
 
     // Save email in local storage
     localStorage.setItem('omniflow_user_email', email);
+
+    // Update header display instantly
+    updateUserDisplay(email);
 
     // Close modal directly
     const modal = document.getElementById('authModal');
@@ -253,7 +255,7 @@ function handleAuth(e) {
 
     alert('Welcome to OmniFlow AI: ' + email);
 }
-
+    
 
 function updateUserDisplay(email) {
     const actions = document.querySelector('.header-actions');
