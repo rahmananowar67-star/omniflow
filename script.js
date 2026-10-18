@@ -258,14 +258,15 @@ function handleAuth(e) {
     
 
 function updateUserDisplay(email) {
-    const actions = document.querySelector('.header-actions');
+    const actions = document.getElementById('headerActions') || document.querySelector('.header-actions');
     if (!actions) return;
     const username = email.split('@')[0];
     actions.innerHTML = `
-        <span style="color:#38bdf8; font-weight:600; font-size:13px;">👋 ${username}</span>
-        <button class="btn-clean" onclick="logoutUser()" style="color:#ef4444; font-size:12px; margin-left:8px; cursor:pointer;">Logout</button>
+        <span style="color: #38bdf8; font-weight: 600; font-size: 13px;">👋 ${username}</span>
+        <button class="btn-clean" onclick="logoutUser()" style="color: #ef4444; font-size: 12px; margin-left: 8px; cursor: pointer; background: transparent; border: 1px solid #ef4444; padding: 4px 8px; border-radius: 4px;">Logout</button>
     `;
 }
+
 
 function logoutUser() {
     if (confirm('Log out hona chahte hain?')) {
