@@ -27,20 +27,20 @@
 <body>
   
   
-  <header class="app-header">
+  <header class="app-header" style="display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; background: #0f172a; border-bottom: 1px solid #1e293b;">
     <div class="brand">
-      <div class="logo-icon">⚡</div>
-      <div class="brand-text">
-        <span class="logo-title">OmniFlow <span class="badge-ai">AI</span></span>
-        <span class="logo-subtitle">All-in-One Global Creator Hub</span>
-      </div>
+        <div class="logo-icon">⚡</div>
+        <div class="brand-text">
+            <span class="logo-title">OmniFlow <span class="badge-ai">AI</span></span>
+            <span class="logo-subtitle">All-in-One Global Creator Hub</span>
+        </div>
     </div>
-    <div class="header-actions 
-  <button id="loginBtn" class="btn-clean" onclick="document.getElementById('authModal').style.display='flex'">Log In</button>
-<button id="freeAccessBtn" class="btn-primary" onclick="document.getElementById('authModal').style.display='flex'">Free Access</button>
-      
-      
+    <div class="header-actions" id="headerActions" style="display: flex; align-items: center; gap: 10px;">
+        <button class="btn-clean" onclick="document.getElementById('authModal').style.display='flex'">Log In</button>
+        <button class="btn-primary" onclick="document.getElementById('authModal').style.display='flex'">Free Access</button>
     </div>
+  </header>
+  
   </header>
 
   <!-- Main Workspace -->
