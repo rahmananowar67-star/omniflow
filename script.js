@@ -213,16 +213,18 @@ function copyOutput() {
 function openAuthModal() {
     const modal = document.getElementById('authModal');
     if (modal) {
+        modal.style.display = 'flex';
         modal.style.setProperty('display', 'flex', 'important');
     }
 }
-
 function closeAuthModal() {
     const modal = document.getElementById('authModal');
     if (modal) {
+        modal.style.display = 'none';
         modal.style.setProperty('display', 'none', 'important');
     }
 }
+
 
 function handleAuth(e) {
     if (e) e.preventDefault();
