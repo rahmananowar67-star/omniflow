@@ -213,19 +213,23 @@
         <h3 style="margin-bottom: 8px; font-size: 22px; color: #fff;">Log In to OmniFlow</h3>
         <p style="color: #aaa; font-size: 14px; margin-bottom: 20px;">Apna email darj karein aur instant access paayein.</p>
         
-        <form id="authForm" onsubmit="handleAuth(event)">
-            <div style="margin-bottom: 15px; text-align: left;">
-                <label style="font-size: 13px; color: #ccc; display: block; margin-bottom: 5px;">Email Address</label>
-                <input type="email" id="authEmail" placeholder="name@example.com" required style="width: 100%; padding: 12px; border-radius: 8px; background: #0f172a; border: 1px solid #334155; color: #fff; outline: none;">
-            </div>
-            <button type="submit" style="width: 100%; padding: 12px; background: #38bdf8; color: #0f172a; border: none; border-radius: 8px; font-weight: 600; font-size: 15px; cursor: pointer;">Continue to Dashboard</button>
-        </form>
-    </div>
+        <div style="margin-bottom: 15px; text-align: left;">
+    <label style="font-size: 13px; color: #ccc; display: block; margin-bottom: 5px;">Email Address</label>
+    <input type="email" id="authEmail" placeholder="name@example.com" required style="width: 100%; padding: 12px; background: #1a1a2e; border: 1px solid #444; color: #fff; border-radius: 6px;">
 </div>
-  
-  
-  
-
+<button type="button" onclick="
+    const email = document.getElementById('authEmail').value.trim();
+    if (!email) {
+        alert('Kripya apna email darj karein!');
+    } else {
+        localStorage.setItem('omniflow_user_email', email);
+        document.getElementById('authModal').style.display = 'none';
+        const mainContainer = document.getElementById('mainDashboard') || document.querySelector('.main-container');
+        if (mainContainer) mainContainer.style.display = 'block';
+        alert('Welcome to OmniFlow AI: ' + email);
+    }
+" style="width: 100%; padding: 12px; background: #38bdf8; color: #0f172a; border: none; font-weight: 600; border-radius: 6px; cursor: pointer;">Continue to Dashboard</button>
+      
   <script src="script.js"></script>
 
   <!-- FOOTER & LEGAL LINKS -->
