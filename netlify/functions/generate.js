@@ -117,7 +117,7 @@ exports.handler = async function (event) {
 
     if (!r.ok) {
       console.error('Gemini error', r.status, data && data.error && data.error.message);
-      return reply(502, { error: 'AI service is busy. Please try again in a moment.' });
+          return reply(502, { error: 'AI service error ' + r.status + ': ' + ((data && data.error && data.error.message) || 'unknown') });
     }
 
     const cand = data.candidates && data.candidates[0];
