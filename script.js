@@ -11,7 +11,10 @@ let activeCategory = 'all';
 const DAILY_FREE_LIMIT = 3;
 
 function todayStr() {
-    return new Date().toISOString().slice(0, 10);
+    const d = new Date();
+    const m = String(d.getMonth() + 1).padStart(2, "0");
+    const day = String(d.getDate()).padStart(2, "0");
+    return d.getFullYear() + "-" + m + "-" + day;
 }
 
 function getCreditsRemaining() {
@@ -210,7 +213,7 @@ async function generateMarketing() {
     }
 
     // Login zaroori hai
-    if (!localStorage.getItem('omniflow_user_email')) {
+        if (!getUserEmail()) {
         openAuthModal();
         return;
     }
@@ -432,4 +435,44 @@ const policyData = {
     terms: {
         title: 'Terms of Service',
         content: '<p><strong>1. Service Usage:</strong> OmniFlow provides AI-generated marketing copy, SEO listings, and tags.</p>' +
-                 '<
+
+                             '<p><strong>2. Fair Use:</strong> Do not use the tool for illegal, hateful, or misleading content. Access can be limited if the service is abused.</p>' +
+                 '<p><strong>3. Free Credits:</strong> Free users get a limited number of generations per day. Limits can change at any time.</p>' +
+                 '<p><strong>4. No Guarantee:</strong> AI output can contain mistakes. Please review all content before you publish or sell with it.</p>'
+    },
+    security: {
+        title: 'Security & Data',
+        content: '<p><strong>1. API Keys:</strong> AI keys are kept only on our server. They are never placed in your browser.</p>' +
+                 '<p><strong>2. Connection:</strong> Requests between your browser and our server travel over HTTPS.</p>' +
+                 '<p><strong>3. Stored Data:</strong> Your email and daily credit count stay in your own browser storage. You can remove them by logging out or clearing site data.</p>'
+    }
+};
+
+function openPolicyModal(key) {
+    const data = policyData[key];
+    if (!data) return;
+    document.getElementById('policyModalTitle').textContent = data.title;
+    document.getElementById('policyModalBody').innerHTML = data.content;
+    document.getElementById('policyModal').classList.add('open');
+}
+
+function closePolicyModal() {
+    const modal = document.getElementById('policyModal');
+    if (modal) modal.classList.remove('open');
+}
+
+document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape') closePolicyModal();
+});
+
+// ---------- Page start ----------
+function initApp() {
+    renderHeader();
+    updateCreditDisplay();
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initApp);
+} else {
+    initApp();
+}
