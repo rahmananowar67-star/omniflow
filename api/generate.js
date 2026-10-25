@@ -1,12 +1,13 @@
-// OmniFlow AI - /api/generate (Vercel serverless function)
-// Setup: Vercel > Project > Settings > Environment Variables
+// OmniFlow AI - Netlify Function: /.netlify/functions/generate
+// (netlify.toml maps /api/generate to this function, so script.js needs no change)
+// Setup: Netlify > Project configuration > Environment variables
 //   GEMINI_API_KEY  (required)  - your Gemini API key
 //   GEMINI_MODEL    (optional)  - defaults to gemini-3.8-flash
 
 const MAX_TOPIC_LENGTH = 1000;
 const RATE_LIMIT = 15;               // requests per IP per window
 const RATE_WINDOW_MS = 60 * 60 * 1000;
-const hits = new Map();              // best-effort only: each serverless instance has its own memory
+const hits = new Map();              // best-effort only: each function instance has its own memory
 
 const BASE_RULES =
   'You write ready-to-use marketing and creator content. Reply only with the finished content in plain text, ' +
@@ -28,10 +29,21 @@ const TOOL_PROMPTS = {
   'english-polish': 'Rewrite the user text as fluent, natural, professional English without changing its meaning. Sections: POLISHED VERSION, then ALTERNATIVE (more casual tone).'
 };
 
-function clientIp(req) {
-  const fwd = req.headers['x-forwarded-for'];
+function reply(statusCode, obj, extraHeaders) {
+  return {
+    statusCode: statusCode,
+    headers: Object.assign({ 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store' }, extraHeaders || {}),
+    body: JSON.stringify(obj)
+  };
+}
+
+function clientIp(event) {
+  const h = event.headers || {};
+  const nf = h['x-nf-client-connection-ip'];
+  if (nf) return String(nf).trim();
+  const fwd = h['x-forwarded-for'];
   if (fwd) return String(fwd).split(',')[0].trim();
-  return (req.socket && req.socket.remoteAddress) || 'unknown';
+  return 'unknown';
 }
 
 function limited(ip) {
@@ -47,47 +59,47 @@ function limited(ip) {
   return false;
 }
 
-module.exports = async function handler(req, res) {
-  res.setHeader('Cache-Control', 'no-store');
-
-  if (req.method !== 'POST') {
-    res.setHeader('Allow', 'POST');
-    return res.status(405).json({ error: 'Only POST is allowed.' });
+exports.handler = async function (event) {
+  if (event.httpMethod !== 'POST') {
+    return reply(405, { error: 'Only POST is allowed.' }, { Allow: 'POST' });
   }
 
   const key = process.env.GEMINI_API_KEY;
   if (!key) {
-    return res.status(500).json({ error: 'Server API key is not set (GEMINI_API_KEY).' });
+    return reply(500, { error: 'Server API key is not set (GEMINI_API_KEY).' });
   }
 
-  let body = req.body;
-  if (typeof body === 'string') {
-    try { body = JSON.parse(body); } catch (e) { body = {}; }
+  let body = {};
+  try {
+    let raw = event.body || '{}';
+    if (event.isBase64Encoded) raw = Buffer.from(raw, 'base64').toString('utf8');
+    body = JSON.parse(raw) || {};
+  } catch (e) {
+    body = {};
   }
-  body = body || {};
 
   const tool = typeof body.tool === 'string' ? body.tool : '';
   const topic = typeof body.topic === 'string' ? body.topic.trim() : '';
 
   if (!Object.prototype.hasOwnProperty.call(TOOL_PROMPTS, tool)) {
-    return res.status(400).json({ error: 'Unknown tool.' });
+    return reply(400, { error: 'Unknown tool.' });
   }
   if (!topic) {
-    return res.status(400).json({ error: 'Please enter a topic.' });
+    return reply(400, { error: 'Please enter a topic.' });
   }
   if (topic.length > MAX_TOPIC_LENGTH) {
-    return res.status(400).json({ error: 'Topic is too long (max ' + MAX_TOPIC_LENGTH + ' characters).' });
+    return reply(400, { error: 'Topic is too long (max ' + MAX_TOPIC_LENGTH + ' characters).' });
   }
 
-  if (limited(clientIp(req))) {
-    return res.status(429).json({ error: 'Too many requests. Please try again later.' });
+  if (limited(clientIp(event))) {
+    return reply(429, { error: 'Too many requests. Please try again later.' });
   }
 
   const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
   const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent';
 
   const controller = new AbortController();
-  const timer = setTimeout(function () { controller.abort(); }, 45000);
+  const timer = setTimeout(function () { controller.abort(); }, 24000);
 
   try {
     const r = await fetch(url, {
@@ -105,7 +117,7 @@ module.exports = async function handler(req, res) {
 
     if (!r.ok) {
       console.error('Gemini error', r.status, data && data.error && data.error.message);
-      return res.status(502).json({ error: 'AI service is busy. Please try again in a moment.' });
+      return reply(502, { error: 'AI service is busy. Please try again in a moment.' });
     }
 
     const cand = data.candidates && data.candidates[0];
@@ -113,13 +125,13 @@ module.exports = async function handler(req, res) {
     const text = parts.map(function (p) { return p.text || ''; }).join('').trim();
 
     if (!text) {
-      return res.status(502).json({ error: 'No content came back. Try rewording your topic.' });
+      return reply(502, { error: 'No content came back. Try rewording your topic.' });
     }
-    return res.status(200).json({ text: text });
+    return reply(200, { text: text });
   } catch (err) {
     const timedOut = err && err.name === 'AbortError';
     console.error('generate failed', err && err.message);
-    return res.status(timedOut ? 504 : 502).json({
+    return reply(timedOut ? 504 : 502, {
       error: timedOut ? 'The AI took too long. Please try again.' : 'Could not reach the AI service.'
     });
   } finally {
