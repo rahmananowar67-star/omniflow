@@ -216,25 +216,38 @@ exports.handler = async function (event) {
     return reply(status, out);
   }
 
-  const model = process.env.GEMINI_MODEL || 'gemini-3.8-flash';
-  const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(model) + ':generateContent';
+  // Pehla model busy ho to agla model khud try hoga
+  const models = [process.env.GEMINI_MODEL || 'gemini-3.8-flash', 'gemini-3.6-flash', 'gemini-3.5-flash-lite']
+    .filter(function (m, i, arr) { return arr.indexOf(m) === i; });
 
   try {
-    const r = await fetchWithTimeout(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
-      body: JSON.stringify({
-        systemInstruction: { parts: [{ text: BASE_RULES + TOOL_PROMPTS[tool] }] },
-        contents: [{ role: 'user', parts: [{ text: 'Topic / input:\n' + topic }] }],
-        generationConfig: { maxOutputTokens: 8192 }
-      })
-    }, 24000);
+    let r = null, data = {}, lastStatus = 0;
+    for (let i = 0; i < models.length; i++) {
+      const url = 'https://generativelanguage.googleapis.com/v1beta/models/' + encodeURIComponent(models[i]) + ':generateContent';
+      try {
+        r = await fetchWithTimeout(url, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': geminiKey },
+          body: JSON.stringify({
+            systemInstruction: { parts: [{ text: BASE_RULES + TOOL_PROMPTS[tool] }] },
+            contents: [{ role: 'user', parts: [{ text: 'Topic / input:\n' + topic }] }],
+            generationConfig: { maxOutputTokens: 8192 }
+          })
+        }, 20000);
+      } catch (e) {
+        if (i === models.length - 1) throw e;
+        console.error('Gemini attempt failed', models[i], e && e.message);
+        continue;
+      }
+      data = await r.json().catch(function () { return {}; });
+      if (r.ok) break;
+      lastStatus = r.status;
+      console.error('Gemini error', models[i], r.status, data && data.error && data.error.message);
+      if (!(r.status === 429 || r.status === 404 || r.status >= 500)) break;
+    }
 
-    const data = await r.json().catch(function () { return {}; });
-
-    if (!r.ok) {
-      console.error('Gemini error', r.status, data && data.error && data.error.message);
-      return fail(502, 'AI service is busy. Please try again in a moment.');
+    if (!r || !r.ok) {
+      return fail(502, 'AI service is busy (code ' + lastStatus + '). Please try again in a moment.');
     }
 
     const cand = data.candidates && data.candidates[0];
@@ -263,4 +276,4 @@ module.exports = async function (req, res) {
   Object.keys(out.headers || {}).forEach(function (k) { res.setHeader(k, out.headers[k]); });
   res.end(out.body);
 };
-    
+                                                                         
