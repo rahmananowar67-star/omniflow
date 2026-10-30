@@ -9,7 +9,6 @@
 //   SUPABASE_PUBLISHABLE_KEY(optional)  - defaults to the public key below
 
 const MAX_TOPIC_LENGTH = 1000;
-const RATE_LIMIT = 15;               // requests per IP per window
 const RATE_LIMIT = 60;               // requests per IP per window
 const RATE_WINDOW_MS = 60 * 60 * 1000;
 const hits = new Map();              // best-effort only: each function instance has its own memory
