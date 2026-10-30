@@ -712,11 +712,29 @@ function closePlansModal() {
     const modal = document.getElementById('plansModal');
     if (modal) modal.classList.remove('open');
 }
+// PayPal links (global). Apne asli links yahan paste karein.
+const PAYPAL_LINKS = {
+    starter: "https://www.paypal.com/ncp/payment/9U4BJYBKC635G", // $9 wala Starter link
+    pro: "https://www.paypal.com/ncp/payment/7JY7YPFYYTK34"       // $19 wala Ultra Pro link
+};
+
+let checkoutBusy = false;
 
 let checkoutBusy = false;
 async function startCheckout(plan) {
     if (checkoutBusy) return;
     if (!getUserEmail()) { openAuthModal(); return; }
+        // Global: PayPal link naye tab mein kholo
+    const region = planRegion || (isIndiaUser() ? 'IN' : 'GLOBAL');
+    if (region === 'GLOBAL') {
+        const link = PAYPAL_LINKS[plan];
+        if (!link) { alert('Global payment is being set up. Please check back very soon!'); return; }
+        const label = plan === 'pro' ? 'Ultra Pro' : 'Starter';
+        const ok = confirm('You will pay on PayPal.\n\nAfter paying, your ' + label + ' plan is activated on this login (' + getUserEmail() + ') within 24 hours.\n\nContinue to PayPal?');
+        if (ok) window.open(link, '_blank', 'noopener');
+        return;
+    }
+    
     checkoutBusy = true;
     try {
         let token = '';
