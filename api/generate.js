@@ -10,6 +10,7 @@
 
 const MAX_TOPIC_LENGTH = 1000;
 const RATE_LIMIT = 15;               // requests per IP per window
+const RATE_LIMIT = 60;               // requests per IP per window
 const RATE_WINDOW_MS = 60 * 60 * 1000;
 const hits = new Map();              // best-effort only: each function instance has its own memory
 
@@ -124,6 +125,16 @@ async function reserveCredit(userId) {
   }
 }
 
+// Server se aaya credit/plan data browser ko bhejne layak banata hai
+function creditsOut(d) {
+  return {
+    remaining: d.remaining,
+    limit: d.limit,
+    plan: d.plan,
+    trial_days_left: typeof d.trial_days_left === 'number' ? d.trial_days_left : null,
+    return creditsOut(d);
+  };
+}
 async function refundCredit(userId) {
   try {
     const r = await rpc('refund_credit', { p_user: userId });
@@ -201,10 +212,11 @@ exports.handler = async function (event) {
     return reply(502, { error: 'Credit service is busy. Please try again in a moment.' });
   }
   if (!credit.ok) {
+    const expired = credit.code === 'trial_expired';
     return reply(429, {
-      error: 'Aaj ke free credits khatam ho gaye.',
-      code: 'no_credits',
-      credits: { remaining: 0, limit: credit.limit }
+      error: expired ? 'Your free trial has ended. Please choose a plan to continue.' : 'Your free credits for today are used up.',
+      code: expired ? 'trial_expired' : 'no_credits',
+      credits: Object.assign(creditsOut(credit), { remaining: 0, trial_expired: expired })
     });
   }
 
@@ -257,7 +269,7 @@ exports.handler = async function (event) {
     if (!text) {
       return fail(502, 'No content came back. Try rewording your topic.');
     }
-    return reply(200, { text: text, credits: { remaining: credit.remaining, limit: credit.limit } });
+      return reply(200, { text: text, credits: creditsOut(credit) });
   } catch (err) {
     const timedOut = err && err.name === 'AbortError';
     console.error('generate failed', err && err.message);
