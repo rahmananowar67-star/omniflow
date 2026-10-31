@@ -131,9 +131,10 @@ function creditsOut(d) {
     limit: d.limit,
     plan: d.plan,
     trial_days_left: typeof d.trial_days_left === 'number' ? d.trial_days_left : null,
-    return creditsOut(d);
+    trial_expired: d.trial_expired === true
   };
 }
+
 async function refundCredit(userId) {
   try {
     const r = await rpc('refund_credit', { p_user: userId });
@@ -142,7 +143,7 @@ async function refundCredit(userId) {
       console.error('refund_credit failed', r.status, JSON.stringify(d));
       return null;
     }
-    return { remaining: d.remaining, limit: d.limit };
+    return creditsOut(d);
   } catch (e) {
     console.error('refund_credit error', e && e.message);
     return null;
@@ -268,7 +269,7 @@ exports.handler = async function (event) {
     if (!text) {
       return fail(502, 'No content came back. Try rewording your topic.');
     }
-      return reply(200, { text: text, credits: creditsOut(credit) });
+    return reply(200, { text: text, credits: creditsOut(credit) });
   } catch (err) {
     const timedOut = err && err.name === 'AbortError';
     console.error('generate failed', err && err.message);
@@ -287,4 +288,4 @@ module.exports = async function (req, res) {
   Object.keys(out.headers || {}).forEach(function (k) { res.setHeader(k, out.headers[k]); });
   res.end(out.body);
 };
-                                                                         
+
