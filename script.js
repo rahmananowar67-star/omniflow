@@ -314,7 +314,7 @@ async function generateMarketing() {
 
         if (response.status === 401) {
             outputBox.style.display = 'none';
-            alert('Aapka login expire ho gaya. Dobara login karein.');
+         alert('Your login has expired. Please log in again.');
             await handleSessionExpired();
             return;
         }
@@ -329,7 +329,7 @@ async function generateMarketing() {
         }
 
         if (!response.ok || !data.text) {
-            setOutput('⚠️ ' + (data.error || 'Content generate nahi ho paya. Thodi der baad dobara try karein.') + '\n\n(Is baar aapka credit use nahi hua.)', 'error');
+          setOutput('⚠️ ' + (data.error || 'Could not generate content. Please try again shortly.') + '\n\n(Your credit was not used.)', 'error');
             return;
         }
 
@@ -342,10 +342,10 @@ async function generateMarketing() {
             showDemo(topic);
             return;
         }
-        const msg = err && err.name === 'AbortError'
-            ? 'Request bahut der le rahi hai. Dobara try karein.'
-            : 'Internet ya server ki dikkat hai. Dobara try karein.';
-        setOutput('⚠️ ' + msg + '\n\n(Agar credit kat gaya ho to kuch der mein wapas dikhega.)', 'error');
+                const msg = err && err.name === 'AbortError'
+            ? 'The request is taking too long. Please try again.'
+            : 'Internet or server problem. Please try again.';
+        setOutput('⚠️ ' + msg + '\n\n(If a credit was deducted, it will be restored shortly.)', 'error');
         refreshCredits();
     } finally {
         clearTimeout(timer);
@@ -468,7 +468,7 @@ async function signInWithGoogle() {
     const analytics = document.getElementById('consentAnalytics');
     setAnalytics(!!(analytics && analytics.checked));
     if (!sb) {
-        showAuthError('Login service load nahi ho paya. Internet check karke page refresh karein.');
+    showAuthError('Login service could not load. Check your internet and refresh the page.');
         return;
     }
     const btn = document.getElementById('googleBtn');
@@ -481,7 +481,7 @@ async function signInWithGoogle() {
         if (res && res.error) throw res.error;
         // yahan se browser Google ke page par chala jaata hai
     } catch (err) {
-        showAuthError('Google login shuru nahi ho paya. Thodi der baad dobara try karein.');
+       showAuthError('Could not start Google login. Please try again shortly.');
         updateConsentGate();
     }
 }
@@ -501,7 +501,7 @@ async function handleSessionExpired() {
 }
 
 async function logoutUser() {
-    if (!confirm('Log out hona chahte hain?')) return;
+        if (!confirm('Do you want to log out?')) return;
     try { if (sb) await sb.auth.signOut(); } catch (err) { /* ignore */ }
     session = null;
 
@@ -809,11 +809,12 @@ document.addEventListener('keydown', function (e) {
 
 // ---------- Page start ----------
 async function initApp() {
-    updateCreditDisplay();
+showAuthError('Login service could not load. Check your internet and refresh the page.');
 
     if (!initSupabase()) {
         renderHeader();
         showAuthError('Login service load nahi ho paya. Internet check karke page refresh karein.');
+            if (!confirm('Do you want to log out?')) return;
         return;
     }
 
