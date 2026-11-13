@@ -16,7 +16,8 @@
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+  <noscript><link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600..800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet"></noscript>
   <link rel="stylesheet" href="style.css">
   <style>
     .auth-google-btn { display: flex; align-items: center; justify-content: center; gap: 10px; }
@@ -32,15 +33,21 @@
   </style>
 
   <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-LNCJM70WFP"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
-    // Analytics tab tak band rahega jab tak user khud ijazat na de (DPDP)
     gtag('consent', 'default', { analytics_storage: 'denied', ad_storage: 'denied', ad_user_data: 'denied', ad_personalization: 'denied' });
     try { if (localStorage.getItem('omniflow_analytics') === 'on') gtag('consent', 'update', { analytics_storage: 'granted' }); } catch (e) {}
     gtag('js', new Date());
     gtag('config', 'G-LNCJM70WFP');
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-LNCJM70WFP';
+        document.head.appendChild(s);
+      }, 2000);
+    });
   </script>
 </head>
 <body class="logged-out">
@@ -188,8 +195,8 @@
 
     </div>
     <!-- Sample Outputs Section -->
-<section style="max-width: 1000px; margin: 40px auto; padding: 0 20px; font-family: sans-serif;">
-  <h2 style="text-align: center; color: #fff; margin-bottom: 24px; font-size: 24px;">See What Sellers Are Generating</h2>
+<section style="max-width: 1000px; margin: 40px auto; padding: 0 20px; font-family: sans-serif;"
+    <h2 style="text-align: center; color: #fff; margin-bottom: 24px; font-size: 24px;">Sample Outputs</h2>
   <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px;">
     
     <!-- Card 1 -->
@@ -198,7 +205,7 @@
       <h3 style="margin: 12px 0 8px 0; font-size: 16px;">Alpha Wolf Gym Hoodie</h3>
       <p style="font-size: 13px; color: #a1a1aa; margin: 0;">Tags: gym hoodie, workout streetwear, aesthetic fitness apparel.</p>
       <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #27272a; font-size: 12px; color: #4ade80;">
-        ✓ Generated in 7 seconds for a Redbubble seller
+         ✓ Sample output for a Redbubble listing
       </div>
     </div>
 
@@ -208,7 +215,7 @@
       <h3 style="margin: 12px 0 8px 0; font-size: 16px;">Cyberpunk Anime Tee</h3>
       <p style="font-size: 13px; color: #a1a1aa; margin: 0;">Hook: "Stop wearing boring plain tees. Level up your aesthetic..."</p>
       <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #27272a; font-size: 12px; color: #4ade80;">
-        ✓ Generated in 5 seconds for a TeePublic creator
+         ✓ Sample output for a TeePublic video ad
       </div>
     </div>
 
@@ -218,7 +225,7 @@
       <h3 style="margin: 12px 0 8px 0; font-size: 16px;">Retro Floral Tote Bag</h3>
       <p style="font-size: 13px; color: #a1a1aa; margin: 0;">100% heavy-duty cotton canvas, aesthetic daily carry design.</p>
       <div style="margin-top: 16px; padding-top: 12px; border-top: 1px solid #27272a; font-size: 12px; color: #4ade80;">
-        ✓ Generated in 6 seconds for an Etsy store
+        ✓ Sample output for an Etsy listing
       </div>
     </div>
 
@@ -276,7 +283,7 @@
     <div class="auth-modal-card">
       <button class="auth-close-btn" type="button" aria-label="Close" onclick="closeAuthModal()">&times;</button>
       <h3>Log In to OmniFlow</h3>
-      <p>Google se login karein aur roz free credits paayein.</p>
+        <p>Log in with Google and get free credits every day.</p>
       <!-- Login Modal Feature Highlights -->
       <div class="consent-box">
         <label class="consent-row">
@@ -357,7 +364,7 @@
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="script.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script defer src="script.js"></script>
 </body>
 </html>
